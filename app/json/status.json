@@ -1,0 +1,18 @@
+{
+  "error": {
+    "login_failure": {
+      "message_fr": "L'adresse mail ou le mot de passe est incorrect",
+      "message_en": "The email or password is incorrect"
+    },
+    "password_format": {
+      "message_fr": "Le mot de passe doit faire au moins 8 caractères et contenir au moins une lettre majuscule, un chiffre et un caractère spécial",
+      "message_en": "The password must be at least 8 characters long and contain at least one uppercase letter, one digit and one special character"
+    }
+  },
+  "success": {
+    "login_success": {
+      "message_fr": "Connexion réussie",
+      "message_en": "Login successful"
+    }
+  }
+}
