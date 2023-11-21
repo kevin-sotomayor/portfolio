@@ -1,0 +1,58 @@
+{
+  "users": [
+    {
+      "username": "Donald J. Trump",
+      "email": "donald.j.trump@gmail.com",
+      "password": "SuperMDP69420!",
+      "image_url": "https://pbs.twimg.com/profile_images/736392853992001537/eF4LJLkn_400x400.jpg"
+    },
+    {
+      "username": "Fumio Kishida / 岸田 文雄",
+      "email": "kishido.fumio@gmail.com",
+      "password": "SuperMDP69420!",
+      "image_url": "https://pbs.twimg.com/media/FAb0aDUVEAE8VYs?format=png&name=small"
+    }
+  ],
+  "posts": [
+    {
+      "title": "I'm the best president ever",
+      "content": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce ac diam dolor. Nullam at tincidunt massa. Nam efficitur, nibh quis rutrum scelerisque, nibh ligula euismod odio, vitae sollicitudin elit risus dignissim dolor. Sed in eleifend tellus. Phasellus feugiat tincidunt justo. Nunc dui sem, semper fringilla felis ut, placerat dictum est. Maecenas quis commodo eros, sit amet tristique ligula. Interdum et malesuada fames ac ante ipsum primis in faucibus. Duis finibus mauris sed euismod euismod. Proin laoreet arcu eget tortor condimentum consequat. Pellentesque pellentesque sapien et elit tincidunt, at consectetur ex lacinia. Sed facilisis mauris arcu, ut hendrerit nunc bibendum sed.",
+      "published": true,
+      "image_url": "https://images.unsplash.com/photo-1700130862148-8bea5f545bfe?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "url": "i-am-the-best-president-ever",
+      "author_id": 1
+    },
+    {
+      "title": "I will build a great wall",
+      "content": "Sed vulputate auctor ligula eu posuere. In in mi non diam faucibus aliquam eu at magna. Praesent vel cursus enim. Donec et neque in nibh condimentum porta sit amet nec sem. Mauris nec est in nisi vulputate ultrices et fermentum dui. Fusce rhoncus arcu varius mi gravida, non tempus urna viverra. Quisque vestibulum eu lectus et consequat.",
+      "published": true,
+      "image_url": "https://images.unsplash.com/photo-1700308234354-0076ed2b310d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "url": "i-will-build-a-great-wall",
+      "author_id": 1
+    },
+    {
+      "title": "Fukushima's fish is delicious",
+      "content": "Nullam fermentum metus blandit cursus feugiat. Nullam quis tempor tellus. Morbi gravida tortor vitae est consequat elementum. Cras sed congue augue. Phasellus sed tortor ac libero fringilla pellentesque. Praesent luctus consectetur diam, sed aliquam erat tristique nec. Nunc vel purus metus. Donec accumsan eu metus eget cursus. Ut vitae egestas neque. Quisque commodo augue mauris, vitae ultrices sem malesuada in. Vestibulum eu sagittis magna. Ut mattis tellus lobortis est facilisis hendrerit. Morbi tellus nisi, mattis ut sapien et, tincidunt accumsan mi. Donec quis condimentum risus. Mauris a nibh id augue maximus tristique vitae in elit.",
+      "published": true,
+      "image_url": "https://images.unsplash.com/photo-1699779393857-b9808b734345?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "url": "fukushima-s-fish-is-delicious",
+      "author_id": 2
+    },
+    {
+      "title": "I will become the next president of the USA in 2024",
+      "content": "Nunc sollicitudin nulla ac ex accumsan, sed condimentum ligula convallis. In consectetur eleifend ex, et vulputate lorem aliquam eu. Quisque mattis felis ac dolor congue, eget porta ex cursus. Sed cursus nisi erat, quis sodales diam vulputate a. Praesent quis lacus finibus, consequat tellus non, ultricies arcu. Fusce ut sapien ex. Ut congue dui sit amet dictum facilisis. Duis condimentum massa et varius pulvinar. Suspendisse sodales gravida augue, vel laoreet lectus posuere ut. Ut sit amet tortor feugiat, placerat libero efficitur, dignissim justo. Vivamus a venenatis urna, ut tempor magna. Suspendisse euismod erat eget vestibulum condimentum.",
+      "published": false,
+      "image_url": "https://images.unsplash.com/photo-1699441208027-3d6d1d436c63?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "url": "i-will-become-the-next-president-of-the-usa-in-2024",
+      "author_id": 1
+    },
+    {
+      "title": "My salary will not be raised",
+      "content": "Mauris at est urna. Vivamus ullamcorper finibus erat, nec interdum ante interdum quis. Maecenas vel nunc non eros lobortis venenatis in ac orci. Donec dapibus a nulla non venenatis. Phasellus fringilla, ante in efficitur euismod, enim massa aliquam eros, vel mattis lectus lorem non risus. Ut molestie ipsum et interdum interdum. Praesent nec aliquam libero, sit amet varius metus. Morbi fermentum erat sit amet nisi dapibus pharetra. Interdum et malesuada fames ac ante ipsum primis in faucibus.",
+      "published": true,
+      "image_url": "https://images.unsplash.com/photo-1696654150003-19858b0720e2?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "url": "my-salary-will-not-be-raised",
+      "author_id": 2
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+html {
+  font-size: 62.5%;
+  box-sizing: border-box;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  background-color: rgb(236, 236, 236);
+}
+
+body {
+  overscroll-behavior: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  width: 100%;
+  min-height: 100vh;
+}
+
+h2 {
+  font-size: 2.4rem;
+  font-weight: 700;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 2rem;
+}

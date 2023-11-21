@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int       @id @default(autoincrement())
+  username   String    @unique @db.VarChar(32)
+  email      String    @unique @db.VarChar(64)
+  password   String    @db.VarChar(60) // bcrypt hash is always 60 chars long
+  image_url  String    @db.VarChar(255) @default("https://imgur.com/tlu00vz")
+  image_alt  String    @db.VarChar(255) // alt text is required for accessibility
+  posts      Post[]    @relation("user_post")
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+}
+
+model Post {
+  id         Int       @id @default(autoincrement())
+  title      String    @db.VarChar(128)
+  content    String    @db.Text
+  published  Boolean   @default(false)
+  image_url  String    @db.VarChar(255)
+  image_alt  String    @db.VarChar(255) // same here
+  url        String    @unique @db.VarChar(255)
+  author     User      @relation("user_post", fields: [author_id], references: [id])
+  author_id  Int
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+}
+

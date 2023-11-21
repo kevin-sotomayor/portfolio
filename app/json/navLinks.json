@@ -1,0 +1,37 @@
+[
+  {
+    "name": "homepage",
+    "title": "Page d'accueil",
+    "description": "Page d'accueil du site",
+    "url": "/",
+    "icon": "Home"
+  },
+  {
+    "name": "blog",
+    "title": "Blog",
+    "description": "Blog du site",
+    "url": "/blog",
+    "icon": "Blog"
+  },
+  {
+    "name": "contact",
+    "title": "Contact",
+    "description": "Page de contact",
+    "url": "/contact",
+    "icon": "At"
+  },
+  {
+    "name": "about",
+    "title": "A propos",
+    "description": "Page à propos",
+    "url": "/about",
+    "icon": "User"
+  },
+  {
+    "name": "admin",
+    "title": "Espace d'administration",
+    "description": "Espace d'administration",
+    "url": "/admin",
+    "icon": "Cog"
+  }
+]
