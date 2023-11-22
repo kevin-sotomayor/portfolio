@@ -38,6 +38,7 @@ interface BlogArticleInterface {
   created_at: string;
   author: {
     username: string;
+    image_url: string;
   }
 }
 
@@ -65,7 +66,10 @@ export default function Article() {
             <PreviousButton />
           </Link>
           <h2 className="article-page__title">{article.title}</h2>
-          <p className="article-page__author">{article.author.username}</p>
+          <div className="article-page__author">
+            <img className="author__image" src={article.author.image_url} alt="" />
+            <p className="author__name">{article.author.username}</p>
+          </div>
           <h3 className="article-page__date">{formatDate(article.created_at)}</h3>
           <img className="article-page__image" src={article.image_url} alt="" />
           <p className="article-page__content">{article.content}</p>

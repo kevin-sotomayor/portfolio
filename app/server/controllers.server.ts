@@ -31,7 +31,6 @@ const controllers = {
       return posts;
     },
     getPostBySlug: async (slug: string) => {
-      await slug;
       const post = await prisma.post.findUnique({
         where : {
           url: slug,
@@ -40,6 +39,7 @@ const controllers = {
           author: {
             select: {
               username: true,
+              image_url: true,
             }
           },
         }
@@ -51,7 +51,17 @@ const controllers = {
     },
   },
   users: {
-
+    getOneUserByMail: async (email: string) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          email,
+        },
+      });
+      if (!user) {
+        return null;
+      }
+      return user;
+    },
   }
 }
 

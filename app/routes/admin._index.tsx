@@ -3,7 +3,7 @@ import { Form } from "@remix-run/react";
 import { json } from "@remix-run/node";
 
 import admin from "../styles/admin.css";
-
+import server from "../server/index.server";
 import status from "../json/status.json";
 
 
@@ -17,21 +17,12 @@ export const links: LinksFunction = () => {
 export async function action({ request }: { request: any }) {
   const body = await request.formData();
   const data = Object.fromEntries(body.entries());
-  // const user = await prisma.user.findUnique({
-  //   where: {
-  //     email: data.email
-  //   }
-  // });
-//   if (!user) {
-//     return json(status.error.login_failure);
-//   }
-
-//   return user;
+  const result = await server.controllers.users.getOneUserByMail(data.email);
+  return json(result);
 }
 
 // TODO: text content in JSON file
 export default function Admin() {
-  // const user = useLoaderData();
   return (
     <main className="admin-page">
       <h2 className="admin-page__title">Admin</h2>

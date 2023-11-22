@@ -21,8 +21,24 @@
 
 .article-page__author {
   padding: 0.5rem 1rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.author__image {
+  height: 5rem;
+  width: 5rem;
+  border-radius: 50%;
+  padding: 0.5rem 0;
+}
+
+.author__name {
   font-size: 1.6rem;
-  display: block;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .article-page__date {
