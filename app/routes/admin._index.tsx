@@ -1,15 +1,10 @@
 import type { LinksFunction, ActionFunctionArgs } from "@remix-run/node"
 import { Form } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import { PrismaClient } from "@prisma/client";
-
 
 import admin from "../styles/admin.css";
 
 import status from "../json/status.json";
-
-
-const prisma = new PrismaClient();
 
 
 export const links: LinksFunction = () => {
@@ -22,15 +17,16 @@ export const links: LinksFunction = () => {
 export async function action({ request }: { request: any }) {
   const body = await request.formData();
   const data = Object.fromEntries(body.entries());
-  const user = await prisma.user.findUnique({
-    where: {
-      email: data.email
-    }
-  });
-  if (!user) {
-    return json(status.error.login_failure);
-  }
-  return user;
+  // const user = await prisma.user.findUnique({
+  //   where: {
+  //     email: data.email
+  //   }
+  // });
+//   if (!user) {
+//     return json(status.error.login_failure);
+//   }
+
+//   return user;
 }
 
 // TODO: text content in JSON file

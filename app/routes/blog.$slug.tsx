@@ -1,12 +1,14 @@
 import { useLoaderData, Link, useMatches } from "@remix-run/react";
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
-import { PrismaClient } from "@prisma/client";
+
 
 import globals from "../styles/globals.css";
 import article from "../styles/article.css";
 
 import formatDate from "../utils/formatDate";
 import PreviousButton from "../components/icons/PreviousButton";
+import server from "../server/index.server";
+
 
 // TODO: meta content is interactive (title, description, image, etc.)
 export const meta: MetaFunction = () => {
@@ -22,8 +24,6 @@ export const links: LinksFunction = () => {
     { rel: "stylesheet", href: article },
   ];
 }
-
-const prisma = new PrismaClient();
 
 interface BlogParamsInterface {
   slug: string;
@@ -44,28 +44,17 @@ interface BlogArticleInterface {
 export async function loader({ params } : { params: BlogParamsInterface }) {
   const slug: string = params.slug;
   try {
-    const result = await prisma.post.findUnique({
-      where: {
-        url: slug
-      },
-      include: {
-        author: {
-          select: {
-            username: true,
-          }
-        }
-      }
-    });
+    const result = await server.controllers.posts.getPostBySlug(slug);
     return result;
   }
   catch (error) {
     console.log(error);
+    return error;
   }
+
 } 
 
 export default function Article() {
-  const matches = useMatches();
-  // console.log(matches);
   const article: BlogArticleInterface = useLoaderData();
   return (
     <main className="article-page">

@@ -1,19 +1,11 @@
 import type { MetaFunction, LinksFunction } from "@remix-run/node";
 import { useLoaderData, Link } from "@remix-run/react";
-import { PrismaClient } from "@prisma/client";
 
 import blog from "../styles/blog.css";
 
 import formatDate from "../utils/formatDate";
+import server from "../server/index.server"
 
-
-const prisma = new PrismaClient();
-
-// TODO: date format function
-// Here is the format given by PostgreSQL : 2023-11-18 17:46:43.873, we need to format it to a more readable format.
-// const formatDate = (date: string) : string => {
-//   console.log(date);
-// }
 
 // Truncate content to a given number of words :
 const truncateContent = (content: string, maxWords: number) : string => {
@@ -44,28 +36,20 @@ export const links: LinksFunction = () => {
 }
 
 export async function loader() {
-  const posts = await prisma.post.findMany({
-    orderBy: {
-      id: 'asc'
-    },
-    include: {
-      author: {
-        select: {
-          username: true,
-        }
-      }
-    },
-    where: {
-      published: true,
-    }
- });
- return posts;
+  try {
+    const test = server.controllers.posts.getAllPosts();
+    return test;
+  }
+  catch (error) {
+    console.log(error);
+  }
 }
 
 // TODO: Typing
 
 export default function Blog() {
   const articles: any = useLoaderData();
+  
   return (
     <main className="blog-page">
       <h2 className="blog-page__title">Blog</h2>
