@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
-import * as uuid from "uuid";
+import { v4 as uuidv4 } from "uuid";
 
 
 const prisma = new PrismaClient();
+
+const saltRounds = 12;
 
 
 // TODO: add types
@@ -65,15 +67,24 @@ const controllers = {
       }
       return user;
     },
+    createUser: async (formData: any) => {
+      // const hashedPassword = bcrypt.hashSync(formData.password, saltRounds);
+    },
   },
   session: {
     generateSessionId: (user: any) => {
-      const session = {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-      };
-      // TODO: create ID with uuid
+      const id = uuidv4();
+      const hashedId = bcrypt.hashSync(id, saltRounds);
+      const result = prisma.session.create({
+        data: {
+          session_id: hashedId,
+          user_id: user.id,
+        },
+      });
+      if (!result) {
+        return null;
+      }
+      return result;
     },
     // TODO: form data type
     login: async (formData: any) => {
@@ -85,15 +96,34 @@ const controllers = {
       if (!user) {
         return null;
       }
-      // const match = await bcrypt.compare(formData.password, user.password);
-      const match = formData.password === user.password;
+      const match = await bcrypt.compare(formData.password, user.password);
       if (!match) {
         return null;
       }
       // Here we return session ID:
-      // return controllers.session.generateSessionId(user);
-      return user;
+      const session = controllers.session.generateSessionId(user);
+      if (!session) {
+        return null;
+      }
+      const result = {
+        username: user.username,
+        profilePicture: user.image_url,
+        pictureAlt: user.image_alt,
+        sessionId: session,
+      }
+      return result;
     },
+  },
+  checkSessionValidy: async (sessionId: string) => {
+    const isValid = await prisma.session.findUnique({
+      where: {
+        session_id: sessionId,
+      },
+    });
+    if (!isValid) {
+      return false;
+    }
+    return true;
   },
 }
 

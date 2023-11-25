@@ -38,11 +38,10 @@ model Post {
 }
 
 model Session {
-  id         Int       @id @default(autoincrement())
-  token      String    @unique @db.VarChar(255)
-  user       User      @relation("user_session", fields: [user_id], references: [id])
-  user_id    Int       @unique
-  created_at DateTime  @default(now())
-  updated_at DateTime? @updatedAt
+  id          Int       @id @default(autoincrement())
+  session_id String     @unique @db.VarChar(60)
+  user        User      @relation("user_session", fields: [user_id], references: [id])
+  user_id     Int       @unique
+  created_at  DateTime  @default(now())
+  updated_at  DateTime? @updatedAt
 }
-

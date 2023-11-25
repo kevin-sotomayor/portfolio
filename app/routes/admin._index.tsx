@@ -35,7 +35,7 @@ export async function action({ request, response }: { request: Request; response
     if (!result) {
       return null;
     }
-    cookie.session = result;
+    cookie.session = result.sessionId;
     return redirect("/", {
       headers: {
         "Set-Cookie": await session.serialize(cookie),
