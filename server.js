@@ -5,7 +5,6 @@ import * as url from "node:url";
 import { createRequestHandler } from "@remix-run/express";
 import { broadcastDevReady, installGlobals } from "@remix-run/node";
 import express from "express";
-import { PrismaClient } from "@prisma/client";
 // Node packages : 
 import compression from "compression";
 import morgan from "morgan";

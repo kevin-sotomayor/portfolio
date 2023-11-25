@@ -18,6 +18,7 @@ model User {
   image_url  String    @db.VarChar(255) @default("https://imgur.com/tlu00vz")
   image_alt  String    @db.VarChar(255) // alt text is required for accessibility
   posts      Post[]    @relation("user_post")
+  sessions   Session[] @relation("user_session")
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 }
@@ -32,6 +33,15 @@ model Post {
   url        String    @unique @db.VarChar(255)
   author     User      @relation("user_post", fields: [author_id], references: [id])
   author_id  Int
+  created_at DateTime  @default(now())
+  updated_at DateTime? @updatedAt
+}
+
+model Session {
+  id         Int       @id @default(autoincrement())
+  token      String    @unique @db.VarChar(255)
+  user       User      @relation("user_session", fields: [user_id], references: [id])
+  user_id    Int       @unique
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 }

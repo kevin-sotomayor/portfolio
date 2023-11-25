@@ -1,7 +1,10 @@
 import { PrismaClient } from '@prisma/client';
+import * as bcrypt from 'bcrypt';
+import * as uuid from "uuid";
 
 
 const prisma = new PrismaClient();
+
 
 // TODO: add types
 // TODO: add error handling
@@ -62,7 +65,36 @@ const controllers = {
       }
       return user;
     },
-  }
+  },
+  session: {
+    generateSessionId: (user: any) => {
+      const session = {
+        id: user.id,
+        username: user.username,
+        email: user.email,
+      };
+      // TODO: create ID with uuid
+    },
+    // TODO: form data type
+    login: async (formData: any) => {
+      const user = await prisma.user.findUnique({
+        where: {
+          email: formData.email,
+        },
+      });
+      if (!user) {
+        return null;
+      }
+      // const match = await bcrypt.compare(formData.password, user.password);
+      const match = formData.password === user.password;
+      if (!match) {
+        return null;
+      }
+      // Here we return session ID:
+      // return controllers.session.generateSessionId(user);
+      return user;
+    },
+  },
 }
 
 export default controllers;
