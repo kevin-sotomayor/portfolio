@@ -18,24 +18,14 @@ export const links: LinksFunction = () => {
 // https://github.com/users/kevin-sotomayor/projects/4/views/2?pane=issue&itemId=45408838
 
 export async function loader({ request }: { request: Request }) {
-  // const cookieHeader = request.headers.get("Cookie");
-  // const cookie = (await session.parse(cookieHeader)) || {};
-  // // We check if the session ID is valid
-  // return json({ session: cookie.session });
-  const userData = {
-    username: "Kevin S.",
-    email: "kevin.sotomayor@outlook.fr",
-    password: "SuperMDP69420!",
-  }
-  const result = await server.controllers.users.createUser(userData);
-  if (!result) {
-    return null;
-  }
-  return result;
+  const cookieHeader = request.headers.get("Cookie");
+  const cookie = (await session.parse(cookieHeader)) || {};
+  // We check if the session ID is valid
+  return json({ session: cookie.session });
 }
 
 // TODO: type
-export async function action({ request, response }: { request: Request; response: Response }) {
+export async function action({ request }: { request: Request }) {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await session.parse(cookieHeader)) || {};
   const formData = await request.formData();
@@ -45,7 +35,7 @@ export async function action({ request, response }: { request: Request; response
     if (!result) {
       return null;
     }
-    cookie.session = result.sessionId;
+    cookie.session = result.session.session_id;
     return redirect("/", {
       headers: {
         "Set-Cookie": await session.serialize(cookie),
@@ -71,13 +61,6 @@ export default function Admin() {
           <input className="admin-page__input" name="password" type="password" placeholder="Mot de passe" autoComplete="current_password" required/>
           <button className="admin-page__button" type="submit">Se connecter</button>
         </Form>
-      </main>
-    )
-  }
-  if (session.email === "donald.j.trump@gmail.com") {
-    return (
-      <main>
-        <p>T'es connecté</p>
       </main>
     )
   }

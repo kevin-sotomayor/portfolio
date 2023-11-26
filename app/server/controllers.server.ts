@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from "uuid";
 
 import regex from '../utils/regex';
@@ -110,12 +110,12 @@ const controllers = {
     },
   },
   session: {
-    generateSessionId: (user: any) => {
-      const id = uuidv4();
-      const hashedId = bcrypt.hashSync(id, saltRounds);
-      const result = prisma.session.create({
+    generateSessionId: async (user: any) => {
+      const token = uuidv4();
+      const hashedToken = bcrypt.hashSync(token, saltRounds);
+      const result = await prisma.session.create({
         data: {
-          session_id: hashedId,
+          session_id: hashedToken,
           user_id: user.id,
         },
       });
@@ -138,8 +138,8 @@ const controllers = {
       if (!match) {
         return null;
       }
-      // Here we return session ID:
-      const session = controllers.session.generateSessionId(user);
+      // On est good <---
+      const session = await controllers.session.generateSessionId(user);
       if (!session) {
         return null;
       }
@@ -147,7 +147,7 @@ const controllers = {
         username: user.username,
         profilePicture: user.image_url,
         pictureAlt: user.image_alt,
-        sessionId: session,
+        session: session,
       }
       return result;
     },

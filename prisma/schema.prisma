@@ -40,7 +40,7 @@ model Post {
 
 model Session {
   id          Int       @id @default(autoincrement())
-  session_id String     @unique @db.VarChar(60)
+  session_id  String    @unique @db.VarChar(60)
   user        User      @relation("user_session", fields: [user_id], references: [id])
   user_id     Int       @unique
   created_at  DateTime  @default(now())
