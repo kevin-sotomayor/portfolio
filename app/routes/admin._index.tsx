@@ -18,10 +18,20 @@ export const links: LinksFunction = () => {
 // https://github.com/users/kevin-sotomayor/projects/4/views/2?pane=issue&itemId=45408838
 
 export async function loader({ request }: { request: Request }) {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await session.parse(cookieHeader)) || {};
-  // We check if the session ID is valid
-  return json({ session: cookie.session });
+  // const cookieHeader = request.headers.get("Cookie");
+  // const cookie = (await session.parse(cookieHeader)) || {};
+  // // We check if the session ID is valid
+  // return json({ session: cookie.session });
+  const userData = {
+    username: "Kevin S.",
+    email: "kevin.sotomayor@outlook.fr",
+    password: "SuperMDP69420!",
+  }
+  const result = await server.controllers.users.createUser(userData);
+  if (!result) {
+    return null;
+  }
+  return result;
 }
 
 // TODO: type
@@ -49,7 +59,9 @@ export async function action({ request, response }: { request: Request; response
 
 // TODO: text content in JSON file
 export default function Admin() {
-  const { session } = useLoaderData();
+  // const { session } = useLoaderData();
+  const test = useLoaderData();
+  console.log(test);
   if (!session) {
     return (
       <main className="admin-page">
@@ -64,7 +76,9 @@ export default function Admin() {
   }
   if (session.email === "donald.j.trump@gmail.com") {
     return (
-      <p>T'es connecté</p>
+      <main>
+        <p>T'es connecté</p>
+      </main>
     )
   }
 }

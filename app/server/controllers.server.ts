@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import * as bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from "uuid";
 
+import regex from '../utils/regex';
+
 
 const prisma = new PrismaClient();
 
@@ -54,6 +56,12 @@ const controllers = {
       }
       return post;
     },
+    createPost: async (formData: any) => {
+      // placeholder
+    },
+    updatePost: async (formData: any) => {
+      // placeholder
+    },
   },
   users: {
     getOneUserByMail: async (email: string) => {
@@ -68,7 +76,37 @@ const controllers = {
       return user;
     },
     createUser: async (formData: any) => {
-      // const hashedPassword = bcrypt.hashSync(formData.password, saltRounds);
+      const isEmailValid = regex.email.test(formData.email);
+      if (!isEmailValid) {
+        return null;
+      }
+      const isUsernameValid = regex.username.test(formData.username);
+      if (!isUsernameValid) {
+        return null;
+      }
+      const isPasswordValid = regex.password.test(formData.password);
+      if (!isPasswordValid) {
+        return null;
+      }
+      const hashedPassword = bcrypt.hashSync(formData.password, saltRounds);
+      const user = await prisma.user.create({
+        data: {
+          username: formData.username,
+          email: formData.email,
+          password: hashedPassword,
+          image_url: formData.profilePicture,
+          image_alt: formData.pictureAlt,
+        },
+      });
+      if (!user) {
+        return null;
+      }
+      const payload = {
+        username: user.username,
+        profilePicture: user.image_url,
+        pictureAlt: user.image_alt,
+      }
+      return payload;
     },
   },
   session: {

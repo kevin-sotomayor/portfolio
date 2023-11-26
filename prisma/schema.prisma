@@ -10,13 +10,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
   id         Int       @id @default(autoincrement())
   username   String    @unique @db.VarChar(32)
   email      String    @unique @db.VarChar(64)
   password   String    @db.VarChar(60) // bcrypt hash is always 60 chars long
   image_url  String    @db.VarChar(255) @default("https://imgur.com/tlu00vz")
-  image_alt  String    @db.VarChar(255) // alt text is required for accessibility
+  image_alt  String    @db.VarChar(255) @default("Photo de profil de l'utilisateur") // alt text is required for accessibility
   posts      Post[]    @relation("user_post")
   sessions   Session[] @relation("user_session")
   created_at DateTime  @default(now())

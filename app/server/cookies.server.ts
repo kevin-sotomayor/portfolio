@@ -9,8 +9,6 @@ export const session = createCookie("__session", {
   path: "/",
   sameSite: "lax",
   secure: process.env.NODE_ENV === "production",
-  maxAge: 60 * 60 * 24 * 30, // 30 days,
   secrets: [process.env.COOKIE_SESSION_SECRET],
-  
+  maxAge: (60 * 60 * 24) * 1, // 1 day,
 });
-
