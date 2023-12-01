@@ -1,7 +1,7 @@
 import { createCookie } from "@remix-run/node";
 
-if (!process.env.SECRET_TEST) {
-  throw new Error("Missing COOKIE_SESSION_SECRET to sign cookies");
+if (!process.env.COOKIE_SECRET) {
+  throw new Error("Missing COOKIE_SECRET to sign cookies");
 }
 
 export const sessionCookie = createCookie("__session", {
@@ -9,6 +9,6 @@ export const sessionCookie = createCookie("__session", {
   sameSite: "lax", // prevents cross site request forgery at some extent
   path: "/",
   maxAge: 10,
-  secrets: [process.env.SECRET_TEST],
+  secrets: [process.env.COOKIE_SECRET],
   secure: process.env.NODE_ENV === "production",
 });

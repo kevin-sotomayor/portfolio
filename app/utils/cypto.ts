@@ -1,66 +1,46 @@
 import { Buffer } from 'node:buffer';
-const { scrypt, randomFill, createCipheriv, createDecipheriv, scryptSync } = await import('node:crypto');
+const { createCipheriv, createDecipheriv, randomBytes } = await import('node:crypto');
 
-export function encrypt (text: string): Promise<string> {
-  return new Promise((resolve, reject) => {
-    // Env variables checkup :
-    if (!process.env.SECRET_TEST || !process.env.SALT_TEST) {
-      reject(Error("Secret or salt cannot be empty"));
-    }
+const algorithm = 'aes-256-cbc';
+const key = process.env.SECRET_TEST;
+const iv = randomBytes(16);
 
-    // Env variables checkup is ok, we can proceed :
-    const algorithm = "aes-192-cbc";
 
-    scrypt(process.env.SECRET_TEST!, process.env.SALT_TEST!, 24, (error, key) => {
-      if (error) {
-        throw error;
-      }
-
-      randomFill(new Uint8Array(16), (error, iv) => {
-        if (error) {
-          reject(error);
-        }
-
-        // We have the key and the iv, now we create the cipher:
-        const cipher = createCipheriv(algorithm, key, iv);
-        let encrypted = "";
-        cipher.setEncoding("hex");
-        
-        cipher.on("data", (chunk) => encrypted += chunk);
-        cipher.on("end", () => resolve(encrypted));
-        
-        cipher.write(text);
-        cipher.end();
-      });
-    });
-  });
+export function encrypt(input: string) {
+  if (!key) {
+    throw new Error('Missing SECRET_TEST environment variable');
+  }
+  try {
+    let cipher = createCipheriv(algorithm, Buffer.from(key), iv);
+    let encrypted = cipher.update(input);
+    encrypted = Buffer.concat([encrypted, cipher.final()]);
+    return { 
+      iv: iv.toString('hex'), 
+      encryptedData: encrypted.toString('hex') 
+    };
+  } 
+  catch (error) {
+    throw new Error(error.message);
+  }
 }
 
-export function decrypt (encryptedData: string): Promise <string> {
-  return new Promise((resolve, reject) => {
-    if (!process.env.SECRET_TEST || !process.env.SALT_TEST) {
-      reject(Error("Secret or salt cannot be empty"));
+
+export function decrypt(input: any) {
+  if (!key) {
+    throw new Error('Missing SECRET_TEST environment variable');
+  }
+  try {
+    if (!input || !input.iv || !input.encryptedData) {
+      throw new Error('Missing input to decrypt');
     }
-
-    // Env variables checkup is ok, we can proceed :
-    const algorithm = "aes-192-cbc";
-
-    const key = scryptSync(process.env.SECRET_TEST!, process.env.SALT_TEST!, 24);
-
-    
-    const iv = Buffer.alloc(16, 0);
-    const decipher = createDecipheriv(algorithm, key, iv);
-
-    let decrypted = "";
-    decipher.on("readable", () => {
-      let chunk;
-      while (null !== (chunk = decipher.read())) {
-        decrypted += chunk.toString("utf8");
-      }
-    });
-    decipher.on("end", () => resolve(decrypted));
-    decipher.write(encryptedData, "hex");
-    decipher.end();
-  });
+    let iv = Buffer.from(input.iv, 'hex');
+    let encryptedText = Buffer.from(input.encryptedData, 'hex');
+    let decipher = createDecipheriv(algorithm, Buffer.from(key), iv);
+    let decrypted = decipher.update(encryptedText);
+    decrypted = Buffer.concat([decrypted, decipher.final()]);
+    return decrypted.toString();
+  } 
+  catch (error) {
+    throw new Error(error.message);
+  }
 }
-

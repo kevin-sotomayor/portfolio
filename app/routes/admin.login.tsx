@@ -36,7 +36,6 @@ export async function loader({ request }: { request: Request }) {
     const formId = await server.controllers.tokens.createToken();
     return formId;
   }
-
 }
 
 // TODO: type
