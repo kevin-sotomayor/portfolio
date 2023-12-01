@@ -2,13 +2,13 @@ import { Buffer } from 'node:buffer';
 const { createCipheriv, createDecipheriv, randomBytes } = await import('node:crypto');
 
 const algorithm = 'aes-256-cbc';
-const key = process.env.SECRET_TEST;
+const key = process.env.ENCRYPTION_KEY;
 const iv = randomBytes(16);
 
 
 export function encrypt(input: string) {
   if (!key) {
-    throw new Error('Missing SECRET_TEST environment variable');
+    throw new Error('Missing ENCRYPTION_KEY environment variable');
   }
   try {
     let cipher = createCipheriv(algorithm, Buffer.from(key), iv);
@@ -27,7 +27,7 @@ export function encrypt(input: string) {
 
 export function decrypt(input: any) {
   if (!key) {
-    throw new Error('Missing SECRET_TEST environment variable');
+    throw new Error('Missing ENCRYPTION_KEY environment variable');
   }
   try {
     if (!input || !input.iv || !input.encryptedData) {
