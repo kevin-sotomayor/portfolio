@@ -20,13 +20,10 @@ const BUILD_PATH = path.resolve("build/index.js");
 const VERSION_PATH = path.resolve("build/version.txt");
 
 const initialBuild = await reimportServer();
-const remixHandler =
-  process.env.NODE_ENV === "development"
-    ? await createDevRequestHandler(initialBuild)
-    : createRequestHandler({
-        build: initialBuild,
-        mode: initialBuild.mode,
-      });
+const remixHandler = process.env.NODE_ENV === "development" ? await createDevRequestHandler(initialBuild) : createRequestHandler({
+  build: initialBuild,
+  mode: initialBuild.mode,
+});
 
 const app = express();
 
@@ -36,10 +33,10 @@ app.use(compression());
 app.disable("x-powered-by");
 
 // Remix fingerprints its assets so we can cache forever.
-app.use(
-  "/build",
-  express.static("public/build", { immutable: true, maxAge: "1y" })
-);
+app.use("/build", express.static("public/build", { 
+  immutable: true, 
+  maxAge: "1y" 
+}));
 
 // Everything else (like favicon.ico) is cached for an hour. You may want to be
 // more aggressive with this caching.
@@ -47,9 +44,11 @@ app.use(express.static("public", { maxAge: "1h" }));
 
 app.use(morgan("tiny"));
 
+
 app.all("*", remixHandler);
 
 const port = process.env.PORT || 3000;
+
 app.listen(port, async () => {
   console.log(`Express server listening on port ${port} 🚀`);
 

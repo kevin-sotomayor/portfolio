@@ -1,12 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcrypt';
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid'
 
 import regex from '../utils/regex';
 
 
 const prisma = new PrismaClient();
-
 const saltRounds = 12;
 
 
@@ -30,7 +29,6 @@ const controllers = {
             }
           },
         },
-        
       });
       if (!posts) {
         return null;
@@ -110,59 +108,138 @@ const controllers = {
     },
   },
   session: {
-    generateSessionId: async (user: any) => {
-      const token = uuidv4();
-      const hashedToken = bcrypt.hashSync(token, saltRounds);
-      const result = await prisma.session.create({
-        data: {
-          session_id: hashedToken,
-          user_id: user.id,
-        },
-      });
-      if (!result) {
-        return null;
-      }
-      return result;
-    },
     // TODO: form data type
     login: async (formData: any) => {
-      const user = await prisma.user.findUnique({
-        where: {
-          email: formData.email,
-        },
-      });
-      if (!user) {
-        return null;
+      try {
+        const user = await prisma.user.findUnique({
+          where: {
+            email: formData.email,
+          },
+        });
+        if (!user) {
+          return null;
+        }
+        const match = await bcrypt.compare(formData.password, user.password);
+        if (!match) {
+          return null;
+        }
+        const userHasSession = await prisma.session.findFirst({
+          where: {
+            user_id: user.id,
+          },
+        });
+        if (userHasSession) {
+          return userHasSession;
+        }
+        // If user doesn't have a session ID, we create one:
+        const uuid = uuidv4();
+        // TODO: encrypt the uuid instead of hashing it so we can decrypt and send it to the client if needed:
+        const sessionId = await prisma.session.create({
+          data: {
+            session_id: uuid,
+            user_id: user.id,
+          }
+        });
+        if (!sessionId) {
+          return null;
+        }
+        const payload = {
+          username: user.username,
+          profilePicture: user.image_url,
+          pictureAlt: user.image_alt,
+          sessionId: sessionId.session_id,
+        }
+        if (!payload) {
+          // Something went wrong despite the checks above
+          return null
+        }
+        return payload;
+      } 
+      catch (error) {
+        return error;
       }
-      const match = await bcrypt.compare(formData.password, user.password);
-      if (!match) {
-        return null;
+    },
+    verifySession: async (cookie: any) => {
+      // This method will check if the session is valid
+      // As well as checking if someone is trying to generate an invalid session
+      if (!cookie.sessionCookie) {
+        return "Did not receive cookie";
       }
-      // On est good <---
-      const session = await controllers.session.generateSessionId(user);
-      if (!session) {
-        return null;
+      try {
+        const hashedUuid = cookie.sessionCookie;
+        const session = await prisma.session.findUnique({
+          where: {
+            session_id: hashedUuid,
+          },
+        });
+        if (!session) {
+          return "ID not found in database";
+        }
+        const user = await prisma.user.findUnique({
+          where: {
+            id: session.user_id,
+          },
+        });
+        if (!user) {
+          return "Could not find user associated with session ID";
+        }
+        const data = {
+          username: user.username,
+          profilePicture: user.image_url,
+          pictureAlt: user.image_alt,
+        }
+        return data;
       }
-      const result = {
-        username: user.username,
-        profilePicture: user.image_url,
-        pictureAlt: user.image_alt,
-        session: session,
+      catch (error) {
+        return error;
       }
-      return result;
     },
   },
-  checkSessionValidy: async (sessionId: string) => {
-    const isValid = await prisma.session.findUnique({
-      where: {
-        session_id: sessionId,
-      },
-    });
-    if (!isValid) {
-      return false;
-    }
-    return true;
-  },
+  tokens: {
+    getAllTokens: async () => {
+      const tokens = await prisma.token.findMany();
+      if (!tokens) {
+        return null;
+      }
+      return tokens;
+    },
+    createToken: async () => {
+      const token = uuidv4();
+      const tokenData = await prisma.token.create({
+        data: {
+          value: token,
+        },
+      });
+      if (!tokenData) {
+        return null;
+      }
+      return token;
+    },
+    deleteToken: async (token: string) => {
+      const deleted = await prisma.token.delete({
+        where: {
+          value: token,
+        },
+      });
+      if (!deleted) {
+        return null;
+      }
+      return 0;
+    },
+
+    // TODO: FormDataEntry type for values coming from the form
+    verifyToken: async (formId: any) => {
+      const token = await prisma.token.findUnique({
+        where: {
+          value: formId,
+        }
+      });
+      if (!token) {
+        return null;
+      }
+      return "ce token existe";
+    },
+  }
 }
 
 export default controllers;

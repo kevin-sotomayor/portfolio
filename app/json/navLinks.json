@@ -31,7 +31,7 @@
     "name": "admin",
     "title": "Espace d'administration",
     "description": "Espace d'administration",
-    "url": "/admin",
+    "url": "/admin/login",
     "icon": "Cog"
   }
 ]

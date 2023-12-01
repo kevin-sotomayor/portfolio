@@ -6,7 +6,7 @@ import home from "../styles/home.css";
 
 export const meta: MetaFunction = () => {
   return [
-    { title: "Portfolio de Kevin Sotomayor" },
+    { title: "Page d'accueil de mon Portfolio" },
     { name: "description", content: "Bienvenue !" },
   ];
 }

@@ -10,7 +10,6 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-
 model User {
   id         Int       @id @default(autoincrement())
   username   String    @unique @db.VarChar(32)
@@ -19,7 +18,7 @@ model User {
   image_url  String    @db.VarChar(255) @default("https://imgur.com/tlu00vz")
   image_alt  String    @db.VarChar(255) @default("Photo de profil de l'utilisateur") // alt text is required for accessibility
   posts      Post[]    @relation("user_post")
-  sessions   Session[] @relation("user_session")
+  session    Session[] @relation("user_session")
   created_at DateTime  @default(now())
   updated_at DateTime? @updatedAt
 }
@@ -39,10 +38,15 @@ model Post {
 }
 
 model Session {
-  id          Int       @id @default(autoincrement())
-  session_id  String    @unique @db.VarChar(60)
-  user        User      @relation("user_session", fields: [user_id], references: [id])
-  user_id     Int       @unique
-  created_at  DateTime  @default(now())
-  updated_at  DateTime? @updatedAt
+  id         Int       @id @default(autoincrement())
+  session_id String    @unique @db.VarChar(60)
+  user       User      @relation("user_session", fields: [user_id], references: [id])
+  user_id    Int       @unique
+  created_at DateTime  @default(now())
+}
+
+model Token {
+  id         Int       @id @default(autoincrement())
+  value      String    @unique @db.VarChar(255)
+  created_at DateTime  @default(now())
 }
