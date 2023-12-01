@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import { v4 as uuidv4 } from 'uuid'
 
 import regex from '../utils/regex';
+import { encrypt, decrypt } from "../utils/cypto";
 
 
 const prisma = new PrismaClient();
@@ -129,7 +130,13 @@ const controllers = {
           },
         });
         if (userHasSession) {
-          return userHasSession;
+          const payload = {
+            username: user.username,
+            profilePicture: user.image_url,
+            pictureAlt: user.image_alt,
+            sessionId: userHasSession.session_id,
+          }
+          return payload;
         }
         // If user doesn't have a session ID, we create one:
         const uuid = uuidv4();
@@ -213,7 +220,8 @@ const controllers = {
       if (!tokenData) {
         return null;
       }
-      return token;
+      const encryptedTokenObject = encrypt(token);
+      return encryptedTokenObject;
     },
     deleteToken: async (token: string) => {
       const deleted = await prisma.token.delete({
@@ -228,18 +236,27 @@ const controllers = {
     },
 
     // TODO: FormDataEntry type for values coming from the form
-    verifyToken: async (formId: any) => {
+    verifyLoginForm: async (formTokenObject: any) => {
+      if (!formTokenObject) {
+        return null;
+      }
+      const encryptedTokenObject = {
+        iv: formTokenObject.iv,
+        encryptedData: formTokenObject.body,
+      }
+      const decryptedToken = decrypt(encryptedTokenObject);
       const token = await prisma.token.findUnique({
         where: {
-          value: formId,
+          value: decryptedToken,
         }
       });
       if (!token) {
         return null;
       }
-      return "ce token existe";
+      // Form token is valid, we can now launch the login process:
+      return true;
     },
-  }
+  },
 }
 
 export default controllers;

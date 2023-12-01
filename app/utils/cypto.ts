@@ -3,24 +3,24 @@ const { createCipheriv, createDecipheriv, randomBytes } = await import('node:cry
 
 const algorithm = 'aes-256-cbc';
 const key = process.env.ENCRYPTION_KEY;
-const iv = randomBytes(16);
 
 
 export function encrypt(input: string) {
   if (!key) {
     throw new Error('Missing ENCRYPTION_KEY environment variable');
   }
+  const iv = randomBytes(16);
   try {
     let cipher = createCipheriv(algorithm, Buffer.from(key), iv);
     let encrypted = cipher.update(input);
     encrypted = Buffer.concat([encrypted, cipher.final()]);
     return { 
       iv: iv.toString('hex'), 
-      encryptedData: encrypted.toString('hex') 
+      body: encrypted.toString('hex') 
     };
   } 
   catch (error) {
-    throw new Error(error.message);
+    return error;
   }
 }
 
@@ -41,6 +41,6 @@ export function decrypt(input: any) {
     return decrypted.toString();
   } 
   catch (error) {
-    throw new Error(error.message);
+    return error;
   }
 }

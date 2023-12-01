@@ -6,9 +6,9 @@ if (!process.env.COOKIE_SECRET) {
 
 export const sessionCookie = createCookie("__session", {
   httpOnly: process.env.NODE_ENV === "production", // prevents cross scripting attacks
-  sameSite: "lax", // prevents cross site request forgery at some extent
+  sameSite: "lax", // helps prevent cross site request forgery to some extent
   path: "/",
-  maxAge: 10,
+  maxAge: 60,
   secrets: [process.env.COOKIE_SECRET],
   secure: process.env.NODE_ENV === "production",
 });
