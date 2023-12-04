@@ -1,6 +1,8 @@
 import { Link } from "@remix-run/react";
 
 import navLinks from "../json/navLinks.json";
+import Github from "../components/icons/GitHub";
+import Linkedin from "../components/icons/Linkedin";
 
 
 const asideMenuHandler = () => {
@@ -47,9 +49,18 @@ export default function Header() {
           </form>
         </nav>
         <section className="header__sidemenu-social">
-          <ul>
-            <li>Linkedin</li>
-            <li>Github</li>
+          <h3 className="sidemenu-social__title">Mon profil sur les réseaux sociaux :</h3>
+          <ul className="sidemenu-social__list">
+            <li className="sidemenu-social__list-element">
+              <a className="sidemenu-social__link-element" href="https://github.com/kevin-sotomayor" rel="noreferrer" target="_blank" >
+                <Github />
+              </a>
+            </li>
+            <li className="sidemenu-social__list-element">
+              <a className="sidemenu-social__link-element" href="https://www.linkedin.com/in/kevin-sotomayor-316b7a271/" rel="noreferrer" target="_blank" >
+                <Linkedin />
+              </a>
+            </li>
           </ul>
         </section>
       </aside>

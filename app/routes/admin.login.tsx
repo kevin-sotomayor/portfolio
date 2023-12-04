@@ -81,6 +81,9 @@ export default function AdminLogin() {
   const formToken = useLoaderData();
   return (
     <main className="admin-page">
+      <h2>Connexion à l'espace d'administration</h2>
+      <h3>Cette page est réservée à l'administrateur du site</h3>
+      <p>A la soumission du formulaire, vous acceptez que vos données de navigation soient récupérées et stockées à des fins de sécurité.</p>
       <Form className="admin-page__form" method="post">
         <input type="hidden" name="formId" value={`${formToken}`}/>
         <input className="admin-page__input" name="email" type="email" placeholder="Adresse mail" autoComplete="email" required/>

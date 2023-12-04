@@ -161,14 +161,38 @@
 
 .header__sidemenu-social {
   margin: 1rem 1rem;
-  background-color: red;
   position: absolute;
   bottom: 0;
   left: 0;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
 }
 
+.sidemenu-social__title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+.sidemenu-social__list {
+  display: flex;
+  flex-direction: row;
+  gap: 0.2rem;
+}
+
+.sidemenu-social__list-element {
+  width: 40px;
+  height: auto;
+  aspect-ratio: 1/1;
+  padding: 0.2rem;
+}
+
+.sidemenu-social__link-element {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 /* State classes : */
 
 .active {
