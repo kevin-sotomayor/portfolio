@@ -20,6 +20,7 @@ export const links: LinksFunction = () => {
   ];
 }
 
+
 export async function loader ({ request }: { request: Request }) {
   const cookieHeader = request.headers.get("Cookie");
   const cookie = (await sessionCookie.parse(cookieHeader)) || {};

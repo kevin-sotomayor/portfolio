@@ -25,7 +25,6 @@ export async function loader ({ request, response }: { request: Request, respons
 
 export default function AdminDashboard() {
   const user: any = useLoaderData();
-  console.log(user);
   return (
     <main>
       <h2>Dashboard</h2>
