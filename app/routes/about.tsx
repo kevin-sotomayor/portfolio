@@ -1,7 +1,13 @@
+import { Outlet } from "@remix-run/react";
+
+
 export default function About() {
   return (
-    <div>
-      <h1>About</h1>
-    </div>
+    <main>
+      <h2>À propos</h2>
+      <h3>Sup my G</h3>
+      <Outlet />
+      <p>yooooooooooooooooooooooooo</p>
+    </main>
   )
 }

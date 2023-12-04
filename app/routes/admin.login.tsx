@@ -1,7 +1,6 @@
-import type { LinksFunction, HeadersFunction } from "@remix-run/node"
+import type { LinksFunction } from "@remix-run/node"
 import { Form, useLoaderData } from "@remix-run/react";
 import { json } from "@remix-run/node";
-import { v4 as uuidv4 } from 'uuid'
 
 import admin from "../styles/admin.css";
 import server from "../server/index.server";
@@ -17,70 +16,61 @@ export const links: LinksFunction = () => {
   ]
 }
 
-export const header: HeadersFunction = () => {
-  return {
-    "Cache-Control": "max-age=0"
-  }
-}
-
-
 export async function loader({ request }: { request: Request }) {
-  // Cookie management :
   const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await sessionCookie.parse(cookieHeader)) || {};
+  const cookie = await sessionCookie.parse(cookieHeader) || {};
   if (cookie.sessionCookie) {
-    // const isSession = await server.controllers.session.verifySession(cookie)
+    const session = await server.controllers.session.verifySession(cookie.sessionCookie);
+    if (!session) {
+      // Session is not valid or has expired:
+      return redirect("/admin/login");
+    }
     return redirect("/admin/dashboard");
   }
   if (!cookie.sessionCookie) {
-    const encryptedTokenObject = await server.controllers.tokens.createToken();
-    return encryptedTokenObject;
+    const formToken = await server.controllers.tokens.createToken();
+    return formToken;
   }
 }
+
 
 // TODO: type
 export async function action({ request }: { request: Request }) {
   const formData = await request.formData();
+  // Before anything, we can check if the data entered is valid (email, password) -> regex in utils :
+
   // We create an object containing the form token vector and body:
-  const formTokenObject = {
-    iv: formData.get("formTokenVector"),
-    body: formData.get("formTokenBody")
+  const formId = {
+    id: formData.get("formId"),
   }
-  if (!formTokenObject.iv || !formTokenObject.body) {
-    // At least one of the components of the token is missing:
-    return null;
+  // If the form doesn't have a unique ID, we can't verify it:
+  if (!formId) {
+    return redirect("/admin/login");
   }
-  // Token object is complete, we can now verify it:
   try {
-    const result = await server.controllers.tokens.verifyLoginForm(formTokenObject);
+    const result = await server.controllers.tokens.verifyLoginForm(formId);
     if (!result) {
       // Token is not valid or has expired:
       return redirect("/admin/login");
-    }
-    // Boolean for now:
-    if (result !== true) {
-      return null;
     }
     // Form is verified, we can now treat the form:
     const formDataObject = {
       email: formData.get("email"),
       password: formData.get("password")
     }
-    const user = await server.controllers.session.login(formDataObject);
-    if (!user) {
-      // User not found or password is not valid:
-      return null; 
+    const session = await server.controllers.session.login(formDataObject);
+    if (!session) {
+      // Something went wrong with the login so we start over:
+      return redirect("/admin/login"); 
     }
-    // User is found and password is valid -> we can create a session:
-    // const cookieHeader = request.headers.get("Cookie");
-    // const cookie = (await sessionCookie.parse(cookieHeader)) || {};
-    // cookie.sessionCookie = result.session_id;
-    // return redirect("/admin/dashboard", {
-    //   headers: {
-    //     "Set-Cookie": await sessionCookie.serialize(cookie)
-    //   }
-    // });
-    return user;
+    const cookieHeader = request.headers.get("Cookie");
+    const cookie = (await sessionCookie.parse(cookieHeader)) || {};
+    cookie.sessionCookie = session;
+    return redirect("/admin/dashboard", {
+      headers: {
+        "Set-Cookie": await sessionCookie.serialize(cookie)
+      }
+    });
   }
   catch (error) {
     return error;
@@ -91,10 +81,8 @@ export default function AdminLogin() {
   const formToken = useLoaderData();
   return (
     <main className="admin-page">
-      <h2 className="admin-page__title">Admin</h2>
       <Form className="admin-page__form" method="post">
-        <input type="hidden" name="formTokenVector" value={`${formToken.iv}`}/>
-        <input type="hidden" name="formTokenBody" value={`${formToken.body}`} />
+        <input type="hidden" name="formId" value={`${formToken}`}/>
         <input className="admin-page__input" name="email" type="email" placeholder="Adresse mail" autoComplete="email" required/>
         <input className="admin-page__input" name="password" type="password" placeholder="Mot de passe" autoComplete="current_password" required/>
         <button className="admin-page__button" type="submit">Se connecter</button>

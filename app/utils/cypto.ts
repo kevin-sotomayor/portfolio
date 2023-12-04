@@ -30,11 +30,11 @@ export function decrypt(input: any) {
     throw new Error('Missing ENCRYPTION_KEY environment variable');
   }
   try {
-    if (!input || !input.iv || !input.encryptedData) {
+    if (!input || !input.iv || !input.body) {
       throw new Error('Missing input to decrypt');
     }
     let iv = Buffer.from(input.iv, 'hex');
-    let encryptedText = Buffer.from(input.encryptedData, 'hex');
+    let encryptedText = Buffer.from(input.body, 'hex');
     let decipher = createDecipheriv(algorithm, Buffer.from(key), iv);
     let decrypted = decipher.update(encryptedText);
     decrypted = Buffer.concat([decrypted, decipher.final()]);

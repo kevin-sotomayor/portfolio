@@ -56,7 +56,18 @@ const controllers = {
       return post;
     },
     createPost: async (formData: any) => {
-      // placeholder
+      // TODO: valid method, this one is only for dev purposes:
+      await prisma.post.create({
+        data: {
+          title: formData.title,
+          content: formData.content,
+          published: formData.published,
+          image_url: formData.image_url,
+          image_alt: formData.image_alt,
+          url: formData.url,
+          author_id: formData.author_id,
+        }
+      });
     },
     updatePost: async (formData: any) => {
       // placeholder
@@ -116,6 +127,9 @@ const controllers = {
           where: {
             email: formData.email,
           },
+          include: {
+            session: true,
+          }
         });
         if (!user) {
           return null;
@@ -124,63 +138,47 @@ const controllers = {
         if (!match) {
           return null;
         }
-        const userHasSession = await prisma.session.findFirst({
-          where: {
-            user_id: user.id,
-          },
-        });
-        if (userHasSession) {
-          const payload = {
-            username: user.username,
-            profilePicture: user.image_url,
-            pictureAlt: user.image_alt,
-            sessionId: userHasSession.session_id,
+        // Email and password are valid, we can now check if the user has a session ID:
+        if (user.session) {
+          const sessionId = encrypt(user.session.session_id);
+          return sessionId;
+        }
+        // If the user doesn't have a session ID, we create one:
+        if (!user.session) {
+          const uuid = uuidv4();
+          const sessionId = await prisma.session.create({
+            data: {
+              session_id: uuid,
+              user_id: user.id,
+            }
+          });
+          if (!sessionId) {
+            return null;
           }
-          return payload;
+          const encryptedSessionId = encrypt(uuid);
+          return encryptedSessionId;
         }
-        // If user doesn't have a session ID, we create one:
-        const uuid = uuidv4();
-        // TODO: encrypt the uuid instead of hashing it so we can decrypt and send it to the client if needed:
-        const sessionId = await prisma.session.create({
-          data: {
-            session_id: uuid,
-            user_id: user.id,
-          }
-        });
-        if (!sessionId) {
-          return null;
-        }
-        const payload = {
-          username: user.username,
-          profilePicture: user.image_url,
-          pictureAlt: user.image_alt,
-          sessionId: sessionId.session_id,
-        }
-        if (!payload) {
-          // Something went wrong despite the checks above
-          return null
-        }
-        return payload;
       } 
       catch (error) {
         return error;
       }
     },
     verifySession: async (cookie: any) => {
-      // This method will check if the session is valid
-      // As well as checking if someone is trying to generate an invalid session
-      if (!cookie.sessionCookie) {
-        return "Did not receive cookie";
+      if (!cookie.iv || !cookie.body) {
+        return null;
       }
       try {
-        const hashedUuid = cookie.sessionCookie;
+        const decryptedUuid = decrypt(cookie);
+        if (!decryptedUuid) {
+          return null;
+        }
         const session = await prisma.session.findUnique({
           where: {
-            session_id: hashedUuid,
+            session_id: decryptedUuid.toString(),
           },
         });
-        if (!session) {
-          return "ID not found in database";
+        if (!session || !session.user_id) {
+          return null;
         }
         const user = await prisma.user.findUnique({
           where: {
@@ -188,14 +186,15 @@ const controllers = {
           },
         });
         if (!user) {
-          return "Could not find user associated with session ID";
+          return null;
         }
-        const data = {
+        const payload = {
           username: user.username,
           profilePicture: user.image_url,
           pictureAlt: user.image_alt,
         }
-        return data;
+        // Here check what we want to return to the client:
+        return payload;
       }
       catch (error) {
         return error;
@@ -211,17 +210,16 @@ const controllers = {
       return tokens;
     },
     createToken: async () => {
-      const token = uuidv4();
-      const tokenData = await prisma.token.create({
+      const generatedUuid = uuidv4();
+      const token = await prisma.token.create({
         data: {
-          value: token,
+          value: generatedUuid,
         },
       });
-      if (!tokenData) {
+      if (!token) {
         return null;
       }
-      const encryptedTokenObject = encrypt(token);
-      return encryptedTokenObject;
+      return token.value;
     },
     deleteToken: async (token: string) => {
       const deleted = await prisma.token.delete({
@@ -236,25 +234,20 @@ const controllers = {
     },
 
     // TODO: FormDataEntry type for values coming from the form
-    verifyLoginForm: async (formTokenObject: any) => {
-      if (!formTokenObject) {
+    verifyLoginForm: async (formToken: any) => {
+      if (!formToken) {
         return null;
       }
-      const encryptedTokenObject = {
-        iv: formTokenObject.iv,
-        encryptedData: formTokenObject.body,
-      }
-      const decryptedToken = decrypt(encryptedTokenObject);
       const token = await prisma.token.findUnique({
         where: {
-          value: decryptedToken,
+          value: formToken.id,
         }
       });
       if (!token) {
         return null;
       }
       // Form token is valid, we can now launch the login process:
-      return true;
+      return token;
     },
   },
 }

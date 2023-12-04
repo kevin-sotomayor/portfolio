@@ -6,9 +6,11 @@ import { RemixServer } from "@remix-run/react";
 import isbot from "isbot";
 import { renderToPipeableStream } from "react-dom/server";
 import { clearTokens } from "./server/cronTasks.server";
+import seed from "./utils/seed";
 
 
 // Cron tasks :
+// seed();
 clearTokens();
 
 const ABORT_DELAY = 5_000;
