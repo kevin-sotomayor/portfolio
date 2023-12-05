@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from 'uuid'
 
 import regex from '../utils/regex';
 import { encrypt, decrypt } from "../utils/cypto";
+import slugify from '../utils/slugify';
 
 
 const prisma = new PrismaClient();
@@ -57,17 +58,27 @@ const controllers = {
     },
     createPost: async (formData: any) => {
       // TODO: valid method, this one is only for dev purposes:
-      await prisma.post.create({
+      if (!formData.title || !formData.content || !formData.author_id || !formData.image_url || !formData.image_alt) {
+        return null;
+      }
+      const published = formData.published === "true" ? true : false;
+      const id = parseInt(formData.author_id, 10);
+      const slug = slugify(formData.title);
+      const post = await prisma.post.create({
         data: {
           title: formData.title,
           content: formData.content,
-          published: formData.published,
+          published: published,
           image_url: formData.image_url,
           image_alt: formData.image_alt,
-          url: formData.url,
-          author_id: formData.author_id,
+          url: slug,
+          author_id: id,
         }
       });
+      if (!post) {
+        return null;
+      }
+      return post;
     },
     updatePost: async (formData: any) => {
       // placeholder
@@ -195,6 +206,29 @@ const controllers = {
         }
         // Here check what we want to return to the client:
         return payload;
+      }
+      catch (error) {
+        return error;
+      }
+    },
+    getSessionId: async (cookie: any) => {
+      if (!cookie.iv || !cookie.body) {
+        return null;
+      }
+      try {
+        const decryptedUuid = decrypt(cookie);
+        if (!decryptedUuid) {
+          return null;
+        }
+        const session = await prisma.session.findUnique({
+          where: {
+            session_id: decryptedUuid.toString(),
+          },
+        });
+        if (!session || !session.user_id) {
+          return null;
+        }
+        return session.user_id;
       }
       catch (error) {
         return error;
