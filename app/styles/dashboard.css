@@ -1,0 +1,150 @@
+.dashboard-page {
+  width: 100%;
+  overflow: auto;
+}
+
+.dashboard-page__header {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1.6rem;
+  padding: 1rem;
+}
+
+.dashboard-page__main {
+}
+
+.sections__list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  border: solid 1px black;
+}
+
+.sections__list-element {
+  padding: 1rem;
+  width: 33%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.4rem;
+}
+
+.sections__list-link {
+  color: black;
+  font-weight: bold;
+  height: 100%;
+  width: 100%;
+}
+
+.dashboard-page__subsections {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.subsections__list {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subsections__list-element {
+  padding: 1rem;
+  width: 33%;
+  height: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 1.2rem;
+}
+
+.subsections__list-link {
+  color: black;
+}
+
+.subsections__title {
+  font-size: 1.6rem;
+  padding: 1rem;
+  font-weight: bold;
+}
+
+.blog-article__write-form {
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+  width: 90%;
+}
+
+.write-form__title {
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+}
+
+.write-form__content {
+  padding: 1rem;
+  font-size: 1.4rem;
+  resize: none;
+  height: 14rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+}
+
+.write-form__url {
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+}
+
+.write-form__alt {
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+}
+
+.write-form__state {
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.state__label {
+  margin-bottom: 0.5rem;
+}
+
+.state__select {
+  font-size: 1.4rem;
+  font-family: Menlo;
+  padding: 0.5rem 1rem;
+}
+
+.write-form__submit {
+  padding: 0.5rem 1rem;
+  font-size: 1.4rem;
+  box-sizing: border-box;
+  font-family: Menlo;
+  margin-bottom: 0.5rem;
+  background-color: #f5f5f5;
+  border: solid 1px black;
+  cursor: pointer;
+  font-weight: bold;
+}

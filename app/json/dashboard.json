@@ -1,0 +1,50 @@
+{
+  "sections": [
+    {
+      "name": "Contenu du blog",
+      "url": "blog",
+      "subsections":[
+        {
+          "name": "Ecrire un article",
+          "url": "write"
+        },
+        {
+          "name": "Editer un article",
+          "url": "edit"
+        },
+        {
+          "name": "Supprimer un article",
+          "url": "delete"
+        }
+      ]
+    },
+    {
+      "name": "Contenu des pages",
+      "url": "pages",
+      "subsections": [
+        {
+          "name": "Editer la page d'accueil",
+          "url": "home"
+        },
+        {
+          "name": "Editer la page de contact",
+          "url": "contact"
+        },
+        {
+          "name": "Editer la page de présentation",
+          "url": "about"
+        }
+      ]
+    },
+    {
+      "name": "Gestion du profil",
+      "url": "profile",
+      "subsections": [
+        {
+          "name": "Editer le profil",
+          "url": "edit"
+        }
+      ]
+    }
+  ]
+}
