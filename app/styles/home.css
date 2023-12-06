@@ -12,7 +12,7 @@
   width: 500%;
   position: relative;
   height: 100%;
-  animation: slide 600s linear infinite;
+  animation: slide 1300s linear infinite;
 }
 
 @keyframes slide {
@@ -25,12 +25,12 @@
 }
 
 .star {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 1);
   border-radius: 50%;
   position: absolute;
   /* box shadow */
   box-shadow: 0 0 10px 1px white;
-  transition: opacity 0.5s ease;
+  /* transition: opacity 0.5s ease; */
 }
 
 
@@ -47,6 +47,6 @@
 }
 
 .homepage__day {
-  background: linear-gradient(0deg, rgb(0, 206, 252) -100%, rgb(0, 92, 204) 100%);
+  background: linear-gradient(0deg, rgb(0, 206, 252) 0%, rgb(0, 155, 232) 50%, rgb(0, 92, 204) 100%);
   height: calc(100vh - 50px);
 }
