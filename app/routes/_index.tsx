@@ -24,23 +24,25 @@ export const links: LinksFunction = () => {
 export async function loader ({ request }: { request: Request }) {
   const arrayOfStarsProps = [];
   const arrayOfCloudsProps = [];
-  const numberOfStars = Math.floor(Math.random() * 100) + 200;
-  const numberOfClouds = Math.floor(Math.random() * 50) + 50;
+  const numberOfStars = Math.floor(Math.random() * 50) + 200;
+  const numberOfClouds = Math.floor(Math.random() * 10) + 30;
   for (let i = 0; i < numberOfStars; i++) {
     let starProps = {
       x: Math.floor(Math.random() * 100),
       y: Math.floor(Math.random() * 133),
       size: Math.floor(Math.random() * 3) + 1,
-      // color: Math.floor(Math.random() * 3) + 1,
+      // color: Math.floor(Math.random() * 3) + 1, // TODO: add various colors
     }
     arrayOfStarsProps.push(starProps);
   }
   for (let i = 0; i < numberOfClouds; i++) {
+    const rng = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
     let cloudProps = {
-      x: Math.floor(Math.random() * 100),
-      y: Math.floor(Math.random() * 100),
-      // size: Math.floor(Math.random() * 3) + 1,
-      // color: Math.floor(Math.random() * 3) + 1,
+      x: rng(-50, 150), 
+      y: rng(-33, 20),
+      width: rng(250, 750),
+      height: rng(150, 275),
+      seed: rng(0, 10000),
     }
     arrayOfCloudsProps.push(cloudProps);
   }
@@ -58,7 +60,7 @@ export default function Index() {
   return (
     <main className="homepage">
       <section className="homepage__night">
-        <div className="night__container">
+        <div className="stars__container">
         {
           data.stars.map((star, index) => {
             return (
@@ -82,7 +84,50 @@ export default function Index() {
 
       </section>
       <section className="homepage__sun"></section>
-      <section className="homepage__day"></section>
+      <section className="homepage__day">
+        <div className="clouds__container">
+          {
+            data.clouds.map((cloud, index) => {
+              return (
+                <div key={index}>
+                  <div className="cloud" id="cloud-back" style={{
+                    left: `${cloud.x}%`,
+                    top: `${cloud.y}%`,
+                    width: `${cloud.width}px`,
+                    height: `${cloud.height}px`,
+                  }}></div>
+                  <div className="cloud" id="cloud-mid" style={{
+                    left: `${cloud.x}%`,
+                    top: `${cloud.y}%`,
+                    width: `${cloud.width}px`,
+                    height: `${cloud.height}px`,
+                  }}></div>
+                  <div className="cloud" id="cloud-front" style={{
+                    left: `${cloud.x}%`,
+                    top: `${cloud.y}%`,
+                    width: `${cloud.width}px`,
+                    height: `${cloud.height}px`,
+                  }}></div>    
+                  <svg width="0" height="0"> 
+                    <filter id="filter-back">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="4" seed={`${cloud.seed}`} />     
+                      <feDisplacementMap  in="SourceGraphic" scale="170" />
+                    </filter>
+                    <filter id="filter-mid">
+                      <feTurbulence type="fractalNoise"  baseFrequency="0.012" numOctaves="2" seed={`${cloud.seed}`}/>
+                      <feDisplacementMap  in="SourceGraphic" scale="150" />
+                    </filter>
+                    <filter id="filter-front">
+                      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed={`${cloud.seed}`}/>
+                      <feDisplacementMap  in="SourceGraphic" scale="100" />
+                    </filter>
+                  </svg>
+                </div>
+              )
+            })
+          }
+        </div>
+      </section>
     </main>
   )
 }
