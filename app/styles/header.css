@@ -7,7 +7,7 @@
   left: 0;
   width: 100%;
   height: 50px;
-  background-color: rgb(200, 200, 200);
+  background-color: rgba(200, 200, 200, 0.66);
   z-index: 100;
 }
 
@@ -201,3 +201,20 @@
   opacity: 0;
 }
 
+@media screen and (min-width: 768px) {
+  .header__sidemenu {
+    width: 50%;
+  }
+}
+
+@media screen and (min-width: 1280px) {
+  .header__sidemenu {
+    width: 33%;
+  }
+}
+
+@media screen and (min-width: 1600px) {
+  .header__sidemenu {
+    width: 20%;
+  }
+}

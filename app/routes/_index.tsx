@@ -25,7 +25,7 @@ export async function loader ({ request }: { request: Request }) {
   const arrayOfStarsProps = [];
   const arrayOfCloudsProps = [];
   const numberOfStars = Math.floor(Math.random() * 50) + 200;
-  const numberOfClouds = Math.floor(Math.random() * 10) + 30;
+  const numberOfClouds = Math.floor(Math.random() * 5) + 30;
   for (let i = 0; i < numberOfStars; i++) {
     let starProps = {
       x: Math.floor(Math.random() * 100),
@@ -38,10 +38,10 @@ export async function loader ({ request }: { request: Request }) {
   for (let i = 0; i < numberOfClouds; i++) {
     const rng = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1) + min);
     let cloudProps = {
-      x: rng(-50, 150), 
-      y: rng(-33, 20),
-      width: rng(250, 750),
-      height: rng(150, 275),
+      x: rng(-100, 150), 
+      y: rng(-50, 20),
+      width: rng(25, 100),
+      height: rng(15, 30),
       seed: rng(0, 10000),
     }
     arrayOfCloudsProps.push(cloudProps);
@@ -79,9 +79,15 @@ export default function Index() {
           })
         }
         </div>
+        <div className="night__content">
+          <h2 className="night__title">Bienvenue</h2>
+        </div>
       </section>
       <section className="homepage__dawn">
-
+        <div className="dawn__content">
+          <h4 className="dawn__title">Je m'appelle Kevin et je suis développeur web.</h4>
+          <p className="dawn__text">Cette page est pûrement esthétique. Vous trouverez toutes les informations de navigation dans le menu accessible en cliquant sur l'icône en haut à gauche de votre écran.</p>
+        </div>
       </section>
       <section className="homepage__sun"></section>
       <section className="homepage__day">
@@ -93,20 +99,20 @@ export default function Index() {
                   <div className="cloud" id="cloud-back" style={{
                     left: `${cloud.x}%`,
                     top: `${cloud.y}%`,
-                    width: `${cloud.width}px`,
-                    height: `${cloud.height}px`,
+                    width: `${cloud.width}rem`,
+                    height: `${cloud.height}rem`,
                   }}></div>
                   <div className="cloud" id="cloud-mid" style={{
                     left: `${cloud.x}%`,
                     top: `${cloud.y}%`,
-                    width: `${cloud.width}px`,
-                    height: `${cloud.height}px`,
+                    width: `${cloud.width}rem`,
+                    height: `${cloud.height}rem`,
                   }}></div>
                   <div className="cloud" id="cloud-front" style={{
                     left: `${cloud.x}%`,
                     top: `${cloud.y}%`,
-                    width: `${cloud.width}px`,
-                    height: `${cloud.height}px`,
+                    width: `${cloud.width}rem`,
+                    height: `${cloud.height}rem`,
                   }}></div>    
                   <svg width="0" height="0"> 
                     <filter id="filter-back">
@@ -126,6 +132,10 @@ export default function Index() {
               )
             })
           }
+        </div>
+        <div className="day__content">
+          <p className="day__text">L'intégralité des éléments sur cette page est généré avec du code JavaScript, du CSS et des balises HTML.</p>
+          <p className="day__text">Vous pouvez rafraichir la page et vous remarquerez que les éléments animés en arrière-plan se rechrgent.</p>
         </div>
       </section>
     </main>

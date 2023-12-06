@@ -22,7 +22,7 @@
   },
   {
     "name": "about",
-    "title": "A propos",
+    "title": "A propos de moi",
     "description": "Page à propos",
     "url": "/about",
     "icon": "User"
