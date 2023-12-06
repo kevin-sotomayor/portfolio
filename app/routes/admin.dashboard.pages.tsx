@@ -1,24 +1,40 @@
-import { Outlet, Link } from "@remix-run/react";
+import { Outlet, Link, useLoaderData } from "@remix-run/react";
 
 import dashboard from "../json/dashboard.json";
+import navLinks from "../json/navLinks.json";
+import e from "express";
+
+const handleChange = (e: any) => {
+  e.preventDefault();
+  console.log(e.target.value);
+}
+
+export async function loader() {
+  return navLinks;
+}
 
 
 export default function AdminDashboardPages() {
-  const section: any = dashboard.sections[1];
-  console.log(section);
+  const data = useLoaderData();
+  console.log(data);
   return (
     <section className="dashboard-page__subsections">
-      <nav className="subsections__nav">
-        <ul className="subsections__list">
-          {
-            section?.subsections.map((subsection: any, index: number) => (
-              <li key={index} className="subsections__list-element">
-                <Link to={`${subsection.url}`} className="subsections__list-link">{subsection.name}</Link>
-              </li>
-            ))
-          }
-        </ul>
-      </nav>
+      <label htmlFor="page">Quelle page allons-nous modifier ?</label>
+      <select name="page" id="page" onChange={handleChange}>
+        <option value="">-- Choisir une page --</option>
+      {
+        data && 
+          data.map((link: any, index: number) => {
+            return (
+              <option key={index} value={link.name}>{link.title}</option>
+            )
+          })
+      }
+      </select>
+      <form action="">
+        {/* put in suspense because of the complexity of the task */}
+        {/* TODO: this */}
+      </form>
       <Outlet/>
     </section>
   )

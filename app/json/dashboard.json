@@ -20,21 +20,7 @@
     },
     {
       "name": "Contenu des pages",
-      "url": "pages",
-      "subsections": [
-        {
-          "name": "Editer la page d'accueil",
-          "url": "home"
-        },
-        {
-          "name": "Editer la page de contact",
-          "url": "contact"
-        },
-        {
-          "name": "Editer la page de présentation",
-          "url": "about"
-        }
-      ]
+      "url": "pages"
     },
     {
       "name": "Gestion du profil",

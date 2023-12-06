@@ -1,3 +1,52 @@
-body {
-  
+.homepage {
+  overflow: hidden;
+  width: 100%;
+}
+
+.homepage__night {
+  background: linear-gradient(0deg, rgb(0, 0, 66) 0%, rgba(0,0,0,1) 100%);
+  height: calc(100vh - 50px);
+}
+
+.night__container {
+  width: 500%;
+  position: relative;
+  height: 100%;
+  animation: slide 600s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-80%); 
+  }
+}
+
+.star {
+  background-color: white;
+  border-radius: 50%;
+  position: absolute;
+  /* box shadow */
+  box-shadow: 0 0 10px 1px white;
+  transition: opacity 0.5s ease;
+}
+
+
+
+.homepage__dawn {
+  background: linear-gradient(0deg, rgb(252, 243, 0) -100%, rgb(1, 68, 150) 66%, rgb(0,0,66) 100%);
+  height: calc(100vh - 50px);
+}
+
+.homepage__sun {
+  background: linear-gradient(0deg, rgb(0, 92, 204) 0%, rgb(252, 243, 0) 50%, rgb(1, 68, 150) 133%);
+  height: 100vh;
+  /* border: solid 1px white; */
+}
+
+.homepage__day {
+  background: linear-gradient(0deg, rgb(0, 206, 252) -100%, rgb(0, 92, 204) 100%);
+  height: calc(100vh - 50px);
 }

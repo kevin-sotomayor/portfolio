@@ -22,9 +22,18 @@ export const links: LinksFunction = () => {
 
 
 export async function loader ({ request }: { request: Request }) {
-  const cookieHeader = request.headers.get("Cookie");
-  const cookie = (await sessionCookie.parse(cookieHeader)) || {};
-  return cookie;
+  const arrayOfStarsProps = [];
+  const numberOfStars = Math.floor(Math.random() * 100) + 100;
+  for (let i = 0; i < numberOfStars; i++) {
+    let starProps = {
+      x: Math.floor(Math.random() * 100),
+      y: Math.floor(Math.random() * 100),
+      size: Math.floor(Math.random() * 3) + 1,
+      // color: Math.floor(Math.random() * 3) + 1,
+    }
+    arrayOfStarsProps.push(starProps);
+  }
+  return arrayOfStarsProps;
 }
 
 
@@ -32,8 +41,33 @@ export default function Index() {
   const data = useLoaderData();
   console.log(data);
   return (
-    <main className="home">
-      <h2>Page d'accueil</h2>
+    <main className="homepage">
+      <section className="homepage__night">
+        <div className="night__container">
+        {
+          data.map((star, index) => {
+            return (
+              <div
+                key={index}
+                className="star"
+                style={{
+                  left: `${star.x}%`,
+                  top: `${star.y}%`,
+                  width: `${star.size}px`,
+                  height: `${star.size}px`,
+                  // backgroundColor: `${star.color}`,
+                }}
+              ></div>
+            )
+          })
+        }
+        </div>
+      </section>
+      <section className="homepage__dawn">
+
+      </section>
+      <section className="homepage__sun"></section>
+      <section className="homepage__day"></section>
     </main>
-  );
+  )
 }
